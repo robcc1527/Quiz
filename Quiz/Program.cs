@@ -14,7 +14,6 @@ public class Program
         question.Type = QuestionType.MultipleChoice;
         question.PossibleAnswers = new List<Answer>(){
             new Answer {Text = "Denver", IsCorrect = false },
-
         };
         newquiz.AddQuestion();
         newquiz.DisplayQuiz();

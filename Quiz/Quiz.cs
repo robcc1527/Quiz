@@ -229,11 +229,18 @@ namespace Quiz
             }
         }
 
+        public string QuestionString()
+        {
+            Console.WriteLine("Enter your question: ");
+            return Console.ReadLine(); ;
+        }
+
         public void AddQuestion()
         {
             QuestionType type;
             Question questionToEnter = new Question();
             string userType = "";
+            string question;
             string stringNumberOfAnswers = "";
             List<Answer> PossibleAnswers = new List<Answer>();
             List<KeyWords> keyWords = new List<KeyWords>();
@@ -241,8 +248,7 @@ namespace Quiz
             int userNumber = 0;
             int userPick = 1;
             bool token;
-            Console.WriteLine("Enter your questions: ");
-            string question = Console.ReadLine();
+
             Console.WriteLine("What is your question type? ");
             Space();
             foreach (QuestionType name in Enum.GetValues(typeof(QuestionType)))
@@ -276,8 +282,10 @@ namespace Quiz
             {
                 type = QuestionType.FreeResponse;
             }
-            if (type == QuestionType.TrueFalse || type == QuestionType.MultipleChoice || type == QuestionType.Checkbox)
+            if (type == QuestionType.MultipleChoice || type == QuestionType.Checkbox)
             {
+                //handleMultipleChoiceCheckbox()
+                question = QuestionString();
                 Console.WriteLine("How many answers do you want to add?");
                 stringNumberOfAnswers = Console.ReadLine();
                 try
@@ -289,13 +297,13 @@ namespace Quiz
                 {
                     Console.WriteLine("Invalid input! Please enter a valid integer.");
                 }
-                for(int i =1;i<intNumbOfAnswers+1;i++) 
+                for (int i = 1; i < intNumbOfAnswers + 1; i++)
                 {
                     Console.WriteLine("What is answer number " + i);
                     string temp = Console.ReadLine();
                     Console.WriteLine("Type true for correct answer or false for not correct");
                     string truefalse = Console.ReadLine();
-                    if (truefalse.Equals("true", StringComparison.OrdinalIgnoreCase)) 
+                    if (truefalse.Equals("true", StringComparison.OrdinalIgnoreCase))
                     {
                         token = true;
                     }
@@ -309,10 +317,47 @@ namespace Quiz
                 questionToEnter.Type = type;
                 questionToEnter.PossibleAnswers = PossibleAnswers;
                 myQuiz.Add(questionToEnter);
+                Console.WriteLine("You have added a question to the quiz");
+                Space();
 
+            }
+            else if(type == QuestionType.TrueFalse)
+            {
+                question = QuestionString();
+                Console.WriteLine("Is your question 1. True or 2. False? ");
+                stringNumberOfAnswers = Console.ReadLine();
+                try
+                {
+                    intNumbOfAnswers = int.Parse(stringNumberOfAnswers);
+                    Console.WriteLine($"You entered: {intNumbOfAnswers}");
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input! Please enter a valid integer.");
+                }
+                if(intNumbOfAnswers == 1)
+                {
+                    PossibleAnswers.Add(new Answer { Text = "true", IsCorrect = true });
+                    PossibleAnswers.Add(new Answer { Text = "false", IsCorrect = false });
+                }else if(intNumbOfAnswers == 2)
+                {
+                    PossibleAnswers.Add(new Answer { Text = "true", IsCorrect = false });
+                    PossibleAnswers.Add(new Answer { Text = "false", IsCorrect = true });
+                }
+                else
+                {
+                    Console.WriteLine("Enter a correct value");
+                }
+                questionToEnter.Text = question;
+                questionToEnter.Type = type;
+                questionToEnter.PossibleAnswers = PossibleAnswers;
+                myQuiz.Add(questionToEnter);
+                Console.WriteLine("You have added a question to the quiz");
+                Space();
             }
             else
             {
+                question = QuestionString();
                 Console.WriteLine("How many answers do you want to add?");
                 stringNumberOfAnswers = Console.ReadLine();
                 Console.WriteLine("How many key words do you want to add?");
@@ -336,6 +381,8 @@ namespace Quiz
                 questionToEnter.Type = type;
                 questionToEnter.Words = keyWords;
                 myQuiz.Add(questionToEnter);
+                Console.WriteLine("You have added a question to the quiz");
+                Space();
             }
             
         }
